@@ -39,7 +39,7 @@ namespace GeekShopping.CartAPI.Repository
         {
             var cart = new Cart()
             {
-                CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId)
+                CartHeader = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId) ?? new CartHeader()
             };
 
             cart.CartDetails = _context.CartDetails.Where(c => c.CartHeaderId == cart.CartHeader.Id).Include(c => c.Product);
@@ -80,7 +80,7 @@ namespace GeekShopping.CartAPI.Repository
         {
             var cart = _mapper.Map<Cart>(vo);
 
-            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == vo.CartDetails.FirstOrDefault().ProductId);
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == cart.CartDetails.FirstOrDefault().ProductId);
 
             if (product == null)
             {
