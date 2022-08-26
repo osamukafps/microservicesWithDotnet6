@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddControllers(options => options.SuppressImplicitRequiredAttributeForNonNullableReferenceTypes = true);
 
 builder.Services
     .AddAuthentication(options =>
@@ -32,6 +33,10 @@ builder.Services
 
 builder.Services.AddHttpClient<IProductService, ProductService>(
     c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:ProductAPI"]));
+
+builder.Services.AddHttpClient<ICartService, CartService>(
+    c => c.BaseAddress = new Uri(builder.Configuration["ServiceUrls:CartAPI"]));
+
 
 var app = builder.Build();
 
