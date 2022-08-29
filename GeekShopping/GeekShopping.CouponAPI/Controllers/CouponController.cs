@@ -9,11 +9,11 @@ namespace GeekShopping.CouponAPI.Controllers
     [ApiController]
     public class CouponController : ControllerBase 
     {
-        private ICouponRepository _repository;
+        private ICouponRepository _couponRepository;
 
         public CouponController(ICouponRepository repository)
         {
-            _repository = repository ?? throw new
+            _couponRepository = repository ?? throw new
                 ArgumentNullException(nameof(repository));
         }
 
@@ -21,8 +21,11 @@ namespace GeekShopping.CouponAPI.Controllers
         [Authorize]
         public async Task<ActionResult<CouponVO>> GetCouponByCouponCode(string couponCode)
         {
-            var coupon = await _repository.GetCouponByCouponCode(couponCode);
-            if (coupon == null) return NotFound();
+            var coupon = await _couponRepository.GetCouponByCouponCode(couponCode);
+
+            if (coupon == null) 
+                return NotFound();
+
             return Ok(coupon);
         }
     }

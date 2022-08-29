@@ -19,8 +19,7 @@ namespace GeekShopping.CartAPI.Repository
 
         public async Task<bool> ApplyCoupon(string userId, string couponCode)
         {
-            var header = await _context.CartHeaders
-                        .FirstOrDefaultAsync(c => c.UserId == userId);
+            var header = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
             if (header != null)
             {
                 header.CouponCode = couponCode;
@@ -33,8 +32,7 @@ namespace GeekShopping.CartAPI.Repository
 
         public async Task<bool> RemoveCoupon(string userId)
         {
-            var header = await _context.CartHeaders
-                        .FirstOrDefaultAsync(c => c.UserId == userId);
+            var header = await _context.CartHeaders.FirstOrDefaultAsync(c => c.UserId == userId);
             if (header != null)
             {
                 header.CouponCode = "";
