@@ -10,3 +10,4 @@ _Neste projeto serão utilizadas as seguintes tecnologias:_
 * **RabbitMQ**
 * **API Gateway com Ocelot**
 * **Swagger OpenAPI**
+* **Docker**
