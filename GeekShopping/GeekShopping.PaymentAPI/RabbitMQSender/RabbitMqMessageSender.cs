@@ -1,17 +1,17 @@
-﻿using GeekShopping.CartAPI.Messages;
-using GeekShopping.MessageBus;
+﻿using GeekShopping.MessageBus;
+using GeekShopping.PaymentAPI.Messages;
 using RabbitMQ.Client;
 using System.Text;
 using System.Text.Json;
 
-namespace GeekShopping.CartAPI.RabbitMQSender
+namespace GeekShopping.PaymentAPI.RabbitMQSender
 {
     public class RabbitMqMessageSender : IRabbitMqMessageSender
     {
         private readonly string _hostName;      
         private readonly string _password;
         private readonly string _userName;
-        private IConnection? _connection;
+        private IConnection _connection;
 
         public RabbitMqMessageSender()
         {
@@ -24,14 +24,12 @@ namespace GeekShopping.CartAPI.RabbitMQSender
         {
             if(ConnectionExists())
             {
-                using (var channel = _connection.CreateModel())
-                {
-                    channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
+                using var channel = _connection.CreateModel();
+                channel.QueueDeclare(queue: queueName, false, false, false, arguments: null);
 
-                    byte[] body = GetMessageAsByteArray(message);
+                byte[] body = GetMessageAsByteArray(message);
 
-                    channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body);
-                }               
+                channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: null, body);
             }                  
         }
 
@@ -42,7 +40,7 @@ namespace GeekShopping.CartAPI.RabbitMQSender
                 WriteIndented = true
             };
 
-            var json = JsonSerializer.Serialize<CheckoutHeaderVO>((CheckoutHeaderVO)message, options);
+            var json = JsonSerializer.Serialize<UpdatePaymentResultMessage>((UpdatePaymentResultMessage)message, options);
 
             var body = Encoding.UTF8.GetBytes(json);
             return body;
